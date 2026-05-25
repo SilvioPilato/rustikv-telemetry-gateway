@@ -1,0 +1,26 @@
+{
+  "__comment": "Minimal Grafana time-series panel using the Infinity datasource (yesoreyeram-infinity-datasource) against rustikv-telemetry-gateway. Import via a dashboard's 'Add panel' → paste JSON model, or adapt into a dashboard. Replace GATEWAY_IP and the Infinity datasource uid. Grafana's ${__from:date:seconds}/${__to:date:seconds} expand to the dashboard time range in epoch seconds; agg=avg with step=60 pushes 1-minute downsampling into rustikv's server-side aggregation.",
+  "type": "timeseries",
+  "title": "Pi CPU user (server-side 1m avg)",
+  "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "INFINITY_DS_UID" },
+  "targets": [
+    {
+      "refId": "A",
+      "type": "json",
+      "source": "url",
+      "format": "timeseries",
+      "url": "http://GATEWAY_IP:8080/query?metric=pi.cpu.user&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=60",
+      "url_options": { "method": "GET" },
+      "root_selector": "",
+      "columns": [
+        { "selector": "time", "text": "time", "type": "timestamp_epoch_ms" },
+        { "selector": "value", "text": "value", "type": "number" }
+      ]
+    }
+  ],
+  "fieldConfig": {
+    "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10 } },
+    "overrides": []
+  },
+  "options": { "legend": { "displayMode": "list", "placement": "bottom" } }
+}
