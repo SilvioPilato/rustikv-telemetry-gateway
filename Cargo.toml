@@ -1,0 +1,7 @@
+[package]
+name = "rustikv-telemetry-gateway"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rustikv = { git = "https://github.com/SilvioPilato/rustikv.git", branch = "main" }
