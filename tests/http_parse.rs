@@ -1,4 +1,4 @@
-use rustikv_telemetry_gateway::http::{QueryParams, parse_request_target};
+use rustikv_telemetry_gateway::http::parse_request_target;
 
 #[test]
 fn parses_path_and_query_params() {
