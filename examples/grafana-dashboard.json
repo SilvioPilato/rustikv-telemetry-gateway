@@ -25,8 +25,8 @@
         "type": "textbox",
         "label": "Pi hostname",
         "description": "collectd hostname (check /etc/collectd/collectd.conf Hostname setting)",
-        "current": { "value": "raspberrypi", "text": "raspberrypi", "selected": true },
-        "options": [{ "value": "raspberrypi", "text": "raspberrypi", "selected": true }],
+        "current": { "value": "cyber", "text": "cyber", "selected": true },
+        "options": [{ "value": "cyber", "text": "cyber", "selected": true }],
         "hide": 0
       },
       {
