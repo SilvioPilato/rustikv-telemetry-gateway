@@ -110,7 +110,7 @@ fn build_response(
     for (b_from, b_to) in buckets {
         if let Some(v) = query_agg(client, agg, metric, b_from, b_to).map_err(|e| (502u16, e))? {
             points.push(Point {
-                time: b_to,
+                time: b_to * 1000,
                 value: v,
             });
         }
@@ -130,7 +130,7 @@ fn query_raw(client: &mut Client, metric: &str, from: i64, to: i64) -> Result<Ve
             pair[1].parse::<f64>(),
         ) {
             points.push(Point {
-                time: ts,
+                time: ts * 1000,
                 value: v,
             });
         }

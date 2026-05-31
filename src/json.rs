@@ -3,8 +3,8 @@ pub struct Point {
     pub value: f64,
 }
 
-/// Serialize points as a JSON array of `{"time":<unix_seconds>,"value":<f64>}`.
-/// Grafana's Infinity datasource maps this directly to a time series.
+/// Serialize points as a JSON array of `{"time":<unix_ms>,"value":<f64>}`.
+/// Grafana's Infinity datasource column type `timestamp_epoch` expects milliseconds.
 pub fn points_to_json(points: &[Point]) -> String {
     let mut out = String::from("[");
     for (i, p) in points.iter().enumerate() {
