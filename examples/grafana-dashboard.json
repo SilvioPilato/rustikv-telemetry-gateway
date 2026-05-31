@@ -68,7 +68,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -82,7 +82,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -96,7 +96,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -127,7 +127,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -141,7 +141,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -155,7 +155,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -186,7 +186,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -200,7 +200,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -214,7 +214,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -253,7 +253,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -284,7 +284,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -298,7 +298,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -329,7 +329,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -343,7 +343,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
@@ -374,7 +374,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         },
@@ -388,7 +388,7 @@
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
-            { "selector": "time",  "text": "time",  "type": "timestamp_epoch_ms" },
+            { "selector": "time",  "text": "time",  "type": "timestamp_epoch" },
             { "selector": "value", "text": "value", "type": "number" }
           ]
         }
