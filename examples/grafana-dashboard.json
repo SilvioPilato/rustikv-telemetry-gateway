@@ -64,7 +64,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "user",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.cpu.percent-user&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.user&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -78,7 +78,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "system",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.cpu.percent-system&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.system&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -92,7 +92,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "iowait",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.cpu.percent-wait&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.wait&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -123,7 +123,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "used",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.memory.memory-used&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.used&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -137,7 +137,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "cached",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.memory.memory-cached&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.cached&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -151,7 +151,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "buffered",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.memory.memory-buffered&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.buffered&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -182,7 +182,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "1m",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.load.load.shortterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.shortterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -196,7 +196,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "5m",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.load.load.midterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.midterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -210,7 +210,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "15m",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.load.load.longterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.longterm&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -249,7 +249,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "temperature",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.thermal-thermal_zone0.temperature&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.thermal.thermal_zone0.temperature&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -280,7 +280,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "used",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.df-root.df_complex-used&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.df.root.df_complex.used&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -294,7 +294,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "free",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.df-root.df_complex-free&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.df.root.df_complex.free&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -325,7 +325,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "rx",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.interface-eth0.if_octets.rx&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.interface.eth0.if_octets.rx&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -339,7 +339,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "tx",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.interface-eth0.if_octets.tx&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.interface.eth0.if_octets.tx&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -370,7 +370,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "read",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.disk-mmcblk0.disk_octets.read&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.disk.mmcblk0.disk_octets.read&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
@@ -384,7 +384,7 @@
           "source": "url",
           "format": "timeseries",
           "seriesName": "write",
-          "url": "http://GATEWAY_IP:8080/query?metric=pi.${host}.disk-mmcblk0.disk_octets.write&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
+          "url": "http://192.168.1.6:8080/query?metric=pi.${host}.disk.mmcblk0.disk_octets.write&from=${__from:date:seconds}&to=${__to:date:seconds}&agg=avg&step=${step}",
           "url_options": { "method": "GET" },
           "root_selector": "",
           "columns": [
