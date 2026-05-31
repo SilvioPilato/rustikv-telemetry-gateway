@@ -110,7 +110,7 @@ fn build_response(
     for (b_from, b_to) in buckets {
         if let Some(v) = query_agg(client, agg, metric, b_from, b_to).map_err(|e| (502u16, e))? {
             points.push(Point {
-                time_ms: b_from * 1000,
+                time_ms: b_to * 1000,
                 value: v,
             });
         }
