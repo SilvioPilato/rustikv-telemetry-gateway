@@ -6,6 +6,7 @@ use rustikv::bffp::{Command, DecodedResponse, decode_response_frame, encode_comm
 pub struct Client {
     addr: String,
     stream: TcpStream,
+    collection: Option<String>,
 }
 
 impl Client {
@@ -14,7 +15,16 @@ impl Client {
         Ok(Self {
             addr: addr.to_string(),
             stream,
+            collection: None,
         })
+    }
+
+    /// After connecting, optionally select a collection. Call this once on
+    /// startup (and again after `reconnect`) when `--collection` is configured.
+    pub fn use_collection(&mut self, name: &str) -> io::Result<()> {
+        self.collection = Some(name.to_string());
+        self.send(Command::Use(name.to_string()))?;
+        Ok(())
     }
 
     /// Send one command (consumed by `encode_command`) and read the decoded response.
@@ -34,9 +44,12 @@ impl Client {
         decode_response_frame(&full)
     }
 
-    /// Reconnect after a dropped connection.
+    /// Reconnect after a dropped connection, re-selecting the collection if one was set.
     pub fn reconnect(&mut self) -> io::Result<()> {
         self.stream = TcpStream::connect(&self.addr)?;
+        if let Some(name) = self.collection.clone() {
+            self.send(Command::Use(name))?;
+        }
         Ok(())
     }
 }

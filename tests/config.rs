@@ -8,6 +8,7 @@ fn defaults_are_sane() {
     assert_eq!(c.rustikv_addr, "127.0.0.1:6666");
     assert_eq!(c.ttl_secs, 86_400);
     assert!(c.batch_max_lines > 0 && c.flush_ms > 0 && c.max_buckets > 0);
+    assert!(c.collection.is_none());
 }
 
 #[test]
@@ -19,4 +20,13 @@ fn parses_overrides_from_args() {
     );
     assert_eq!(c.rustikv_addr, "10.0.0.5:6666");
     assert_eq!(c.ttl_secs, 3600);
+    assert!(c.collection.is_none());
+}
+
+#[test]
+fn parses_collection_flag() {
+    let c = Config::from_args(
+        ["--collection", "metrics"].iter().map(|s| s.to_string()),
+    );
+    assert_eq!(c.collection.as_deref(), Some("metrics"));
 }

@@ -16,6 +16,10 @@ pub fn serve(config: Config) -> std::io::Result<()> {
     let listener = TcpListener::bind(&config.ingest_addr)?;
     eprintln!("ingest listening on {}", config.ingest_addr);
     let mut client = Client::connect(&config.rustikv_addr)?;
+    if let Some(name) = &config.collection {
+        client.use_collection(name)?;
+        eprintln!("ingest: using collection {name:?}");
+    }
 
     for conn in listener.incoming() {
         let conn = match conn {
@@ -45,11 +49,16 @@ fn handle_conn(
     for line in reader.lines() {
         let line = line?;
         match parse_line(&line) {
-            Ok(s) => batch.push((
-                to_key(&s.metric, s.ts),
-                s.value.to_string(),
-                Some(config.ttl_secs),
-            )),
+            Ok(s) => {
+                // When a collection is set its server-side default TTL applies;
+                // pass None so we don't override it. Fall back to per-key TTL otherwise.
+                let ttl = if config.collection.is_some() {
+                    None
+                } else {
+                    Some(config.ttl_secs)
+                };
+                batch.push((to_key(&s.metric, s.ts), s.value.to_string(), ttl));
+            }
             Err(e) => eprintln!("skip line {line:?}: {}", e.0),
         }
         if batch.len() >= config.batch_max_lines || last_flush.elapsed() >= flush_after {

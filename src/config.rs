@@ -3,10 +3,15 @@ pub struct Config {
     pub ingest_addr: String,
     pub query_addr: String,
     pub rustikv_addr: String,
+    /// Per-key TTL applied on every write. Ignored when `collection` is set
+    /// (the collection's server-side default TTL is used instead).
     pub ttl_secs: u32,
     pub batch_max_lines: usize,
     pub flush_ms: u64,
     pub max_buckets: usize,
+    /// If set, the gateway issues `USE <collection>` on connect and relies on
+    /// the collection's default TTL rather than sending per-key TTLs.
+    pub collection: Option<String>,
 }
 
 impl Default for Config {
@@ -19,6 +24,7 @@ impl Default for Config {
             batch_max_lines: 200,
             flush_ms: 1000,
             max_buckets: 2000,
+            collection: None,
         }
     }
 }
@@ -62,6 +68,11 @@ impl Config {
                 "--max-buckets" => {
                     if let Some(v) = it.next() {
                         c.max_buckets = v.parse().expect("--max-buckets");
+                    }
+                }
+                "--collection" => {
+                    if let Some(v) = it.next() {
+                        c.collection = Some(v);
                     }
                 }
                 other => eprintln!("ignoring unknown arg: {other}"),
