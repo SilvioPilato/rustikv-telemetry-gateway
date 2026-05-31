@@ -1,4 +1,4 @@
-{
+﻿{
     "__inputs":  [
                      {
                          "name":  "DS_INFINITY",
@@ -17,7 +17,7 @@
                            "version":  "1.0.0"
                        }
                    ],
-    "title":  "rustikv Telemetry � Raspberry Pi",
+    "title":  "rustikv Telemetry — Raspberry Pi",
     "uid":  "rustikv-pi",
     "schemaVersion":  38,
     "version":  1,
@@ -28,6 +28,25 @@
              },
     "templating":  {
                        "list":  [
+                                    {
+                                        "name":  "gateway",
+                                        "type":  "textbox",
+                                        "label":  "Gateway address",
+                                        "description":  "Host:port of the rustikv-telemetry-gateway query endpoint",
+                                        "current":  {
+                                                        "value":  "localhost:8080",
+                                                        "text":  "localhost:8080",
+                                                        "selected":  true
+                                                    },
+                                        "options":  [
+                                                        {
+                                                            "value":  "localhost:8080",
+                                                            "text":  "localhost:8080",
+                                                            "selected":  true
+                                                        }
+                                                    ],
+                                        "hide":  0
+                                    },
                                     {
                                         "name":  "host",
                                         "type":  "textbox",
@@ -119,7 +138,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "user",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.user\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.user\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -143,7 +162,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "system",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.system\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.system\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -167,7 +186,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "iowait",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.cpu.percent.wait\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.wait\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -227,7 +246,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "used",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -251,7 +270,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "cached",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.cached\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.cached\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -275,7 +294,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "buffered",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.memory.memory.buffered\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.buffered\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -335,7 +354,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "1m",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.shortterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.shortterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -359,7 +378,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "5m",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.midterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.midterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -383,7 +402,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "15m",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.load.load.longterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.longterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -468,7 +487,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "temperature",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.thermal.thermal_zone0.temperature\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.thermal.thermal_zone0.temperature\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -528,7 +547,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "used",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.df.root.df_complex.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -552,7 +571,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "free",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.df.root.df_complex.free\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.free\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -612,7 +631,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "rx",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.interface.eth0.if_octets.rx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.rx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -636,7 +655,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "tx",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.interface.eth0.if_octets.tx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.tx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -696,7 +715,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "read",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.disk.mmcblk0.disk_octets.read\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.read\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
@@ -720,7 +739,7 @@
                                            "source":  "url",
                                            "format":  "timeseries",
                                            "seriesName":  "write",
-                                           "url":  "http://192.168.1.6:8080/query?metric=pi.${host}.disk.mmcblk0.disk_octets.write\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                                           "url":  "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.write\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
                                            "url_options":  {
                                                                "method":  "GET"
                                                            },
