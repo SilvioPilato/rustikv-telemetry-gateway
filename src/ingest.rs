@@ -76,8 +76,14 @@ fn flush(client: &mut Client, batch: &mut Vec<(String, String, Option<u32>)>) {
     }
     let items = std::mem::take(batch);
     let n = items.len();
-    if let Err(e) = client.send(Command::Mset(items)) {
-        eprintln!("mset of {n} failed: {e}; reconnecting");
-        let _ = client.reconnect();
+    match client.send(Command::Mset(items)) {
+        Ok(_) => eprintln!("ingest: flushed {n} point(s)"),
+        Err(e) => {
+            eprintln!("ingest: mset of {n} failed: {e}; reconnecting");
+            match client.reconnect() {
+                Ok(()) => eprintln!("ingest: reconnected successfully"),
+                Err(re) => eprintln!("ingest: reconnect failed: {re}"),
+            }
+        }
     }
 }

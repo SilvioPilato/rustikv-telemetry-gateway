@@ -1,7 +1,7 @@
 use std::io::{self, Read, Write};
 use std::net::TcpStream;
 
-use rustikv::bffp::{Command, DecodedResponse, decode_response_frame, encode_command};
+use rustikv::bffp::{Command, DecodedResponse, ResponseStatus, decode_response_frame, encode_command};
 
 pub struct Client {
     addr: String,
@@ -23,12 +23,31 @@ impl Client {
     /// startup (and again after `reconnect`) when `--collection` is configured.
     pub fn use_collection(&mut self, name: &str) -> io::Result<()> {
         self.collection = Some(name.to_string());
-        self.send(Command::Use(name.to_string()))?;
+        let resp = self.send(Command::Use(name.to_string()))?;
+        if matches!(resp.status, ResponseStatus::Error) {
+            let msg = resp.payload.join("; ");
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                format!("USE {name:?} failed: {msg}"),
+            ));
+        }
         Ok(())
     }
 
     /// Send one command (consumed by `encode_command`) and read the decoded response.
+    /// On a connection error, reconnects once and retries before giving up.
     pub fn send(&mut self, command: Command) -> io::Result<DecodedResponse> {
+        match self.send_once(command.clone()) {
+            Ok(resp) => Ok(resp),
+            Err(e) => {
+                eprintln!("rustikv: send failed ({e}); reconnecting and retrying");
+                self.reconnect()?;
+                self.send_once(command)
+            }
+        }
+    }
+
+    fn send_once(&mut self, command: Command) -> io::Result<DecodedResponse> {
         let frame = encode_command(command);
         self.stream.write_all(&frame)?;
 
@@ -46,9 +65,19 @@ impl Client {
 
     /// Reconnect after a dropped connection, re-selecting the collection if one was set.
     pub fn reconnect(&mut self) -> io::Result<()> {
+        eprintln!("rustikv: reconnecting to {}", self.addr);
         self.stream = TcpStream::connect(&self.addr)?;
+        eprintln!("rustikv: reconnected");
         if let Some(name) = self.collection.clone() {
-            self.send(Command::Use(name))?;
+            eprintln!("rustikv: re-issuing USE {name:?}");
+            let resp = self.send(Command::Use(name.clone()))?;
+            if matches!(resp.status, ResponseStatus::Error) {
+                let msg = resp.payload.join("; ");
+                return Err(io::Error::new(
+                    io::ErrorKind::InvalidInput,
+                    format!("USE {name:?} failed after reconnect: {msg}"),
+                ));
+            }
         }
         Ok(())
     }

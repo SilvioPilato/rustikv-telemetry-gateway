@@ -25,10 +25,17 @@ pub fn serve(config: Config) -> std::io::Result<()> {
     let listener = TcpListener::bind(&config.query_addr)?;
     eprintln!("query listening on {}", config.query_addr);
     let mut client = Client::connect(&config.rustikv_addr)?;
+    if let Some(name) = &config.collection {
+        client.use_collection(name)?;
+        eprintln!("query: using collection {name:?}");
+    }
     for conn in listener.incoming().flatten() {
         if let Err(e) = handle(conn, &config, &mut client) {
-            eprintln!("query conn error: {e}");
-            let _ = client.reconnect();
+            eprintln!("query: conn error: {e}; reconnecting");
+            match client.reconnect() {
+                Ok(()) => eprintln!("query: reconnected successfully"),
+                Err(re) => eprintln!("query: reconnect failed: {re}"),
+            }
         }
     }
     Ok(())
