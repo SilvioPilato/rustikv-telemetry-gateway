@@ -71,7 +71,7 @@
     "panels":  [
                    {
                        "id":  1,
-                       "type":  "timeseries",
+                       "type":  "stat",
                        "title":  "CPU Usage %",
                        "gridPos":  {
                                        "x":  0,
@@ -99,10 +99,18 @@
                                                          ]
                                        },
                        "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto"
                                    },
                        "targets":  [
                                        {
@@ -397,7 +405,7 @@
                    },
                    {
                        "id":  4,
-                       "type":  "timeseries",
+                       "type":  "stat",
                        "title":  "SoC Temperature",
                        "gridPos":  {
                                        "x":  12,
@@ -440,9 +448,18 @@
                                                          ]
                                        },
                        "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "hidden"
-                                                  }
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto"
                                    },
                        "targets":  [
                                        {
