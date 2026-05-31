@@ -1,763 +1,749 @@
 ﻿{
-    "__inputs":  [
-                     {
-                         "name":  "DS_INFINITY",
-                         "label":  "Infinity",
-                         "description":  "Infinity datasource pointing at rustikv-telemetry-gateway",
-                         "type":  "datasource",
-                         "pluginId":  "yesoreyeram-infinity-datasource",
-                         "pluginName":  "Infinity"
-                     }
-                 ],
-    "__requires":  [
-                       {
-                           "type":  "datasource",
-                           "id":  "yesoreyeram-infinity-datasource",
-                           "name":  "Infinity",
-                           "version":  "1.0.0"
-                       }
-                   ],
-    "title":  "rustikv Telemetry — Raspberry Pi",
-    "uid":  "rustikv-pi",
-    "schemaVersion":  38,
-    "version":  1,
-    "refresh":  "30s",
-    "time":  {
-                 "from":  "now-1h",
-                 "to":  "now"
-             },
-    "templating":  {
-                       "list":  [
-                                    {
-                                        "name":  "gateway",
-                                        "type":  "textbox",
-                                        "label":  "Gateway address",
-                                        "description":  "Host:port of the rustikv-telemetry-gateway query endpoint",
-                                        "current":  {
-                                                        "value":  "localhost:8080",
-                                                        "text":  "localhost:8080",
-                                                        "selected":  true
-                                                    },
-                                        "options":  [
-                                                        {
-                                                            "value":  "localhost:8080",
-                                                            "text":  "localhost:8080",
-                                                            "selected":  true
-                                                        }
-                                                    ],
-                                        "hide":  0
-                                    },
-                                    {
-                                        "name":  "host",
-                                        "type":  "textbox",
-                                        "label":  "Pi hostname",
-                                        "description":  "collectd hostname (check /etc/collectd/collectd.conf Hostname setting)",
-                                        "current":  {
-                                                        "value":  "cyber",
-                                                        "text":  "cyber",
-                                                        "selected":  true
-                                                    },
-                                        "options":  [
-                                                        {
-                                                            "value":  "cyber",
-                                                            "text":  "cyber",
-                                                            "selected":  true
-                                                        }
-                                                    ],
-                                        "hide":  0
-                                    },
-                                    {
-                                        "name":  "step",
-                                        "type":  "textbox",
-                                        "label":  "Aggregation step (s)",
-                                        "description":  "Bucket size in seconds passed to rustikv aggregation ops",
-                                        "current":  {
-                                                        "value":  "60",
-                                                        "text":  "60",
-                                                        "selected":  true
-                                                    },
-                                        "options":  [
-                                                        {
-                                                            "value":  "60",
-                                                            "text":  "60",
-                                                            "selected":  true
-                                                        }
-                                                    ],
-                                        "hide":  0
-                                    }
-                                ]
-                   },
-    "panels":  [
-                   {
-                       "id":  1,
-                       "type":  "stat",
-                       "title":  "CPU Usage %",
-                       "gridPos":  {
-                                       "x":  0,
-                                       "y":  0,
-                                       "w":  12,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "percent",
-                                                            "min":  0,
-                                                            "max":  100,
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  1
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "orientation":  "auto",
-                                       "textMode":  "auto",
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "justifyMode":  "auto"
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "user",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "user",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.user\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "user",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "system",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "system",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.system\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "system",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "wait",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "iowait",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.cpu.percent.wait\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "iowait",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  2,
-                       "type":  "timeseries",
-                       "title":  "Memory",
-                       "gridPos":  {
-                                       "x":  12,
-                                       "y":  0,
-                                       "w":  12,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "bytes",
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  1
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "used",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "used",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "used",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "cached",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "cached",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.cached\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "cached",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "buffered",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "buffered",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.memory.memory.buffered\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "buffered",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  3,
-                       "type":  "timeseries",
-                       "title":  "Load Average",
-                       "gridPos":  {
-                                       "x":  0,
-                                       "y":  8,
-                                       "w":  12,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "short",
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  0,
-                                                                           "lineWidth":  2
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "load1",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "1m",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.shortterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "1m",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "load5",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "5m",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.midterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "5m",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "load15",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "15m",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.load.load.longterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "15m",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  4,
-                       "type":  "stat",
-                       "title":  "SoC Temperature",
-                       "gridPos":  {
-                                       "x":  12,
-                                       "y":  8,
-                                       "w":  6,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "celsius",
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "value":  null,
-                                                                                                 "color":  "green"
-                                                                                             },
-                                                                                             {
-                                                                                                 "value":  60,
-                                                                                                 "color":  "yellow"
-                                                                                             },
-                                                                                             {
-                                                                                                 "value":  75,
-                                                                                                 "color":  "red"
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  20,
-                                                                           "lineWidth":  2
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "orientation":  "auto",
-                                       "textMode":  "auto",
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "justifyMode":  "auto"
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "temp",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "temperature",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.thermal.thermal_zone0.temperature\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "temperature",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  5,
-                       "type":  "timeseries",
-                       "title":  "Disk Space (root)",
-                       "gridPos":  {
-                                       "x":  18,
-                                       "y":  8,
-                                       "w":  6,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "bytes",
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  1
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "dfused",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "used",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "used",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "dffree",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "free",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.free\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "free",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  6,
-                       "type":  "timeseries",
-                       "title":  "Network I/O (eth0)",
-                       "gridPos":  {
-                                       "x":  0,
-                                       "y":  16,
-                                       "w":  12,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "Bps",
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  1
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "netrx",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "rx",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.rx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "rx",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "nettx",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "tx",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.tx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "tx",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   },
-                   {
-                       "id":  7,
-                       "type":  "timeseries",
-                       "title":  "Disk I/O (mmcblk0)",
-                       "gridPos":  {
-                                       "x":  12,
-                                       "y":  16,
-                                       "w":  12,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "yesoreyeram-infinity-datasource",
-                                          "uid":  "${DS_INFINITY}"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "unit":  "Bps",
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  1
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom"
-                                                  }
-                                   },
-                       "targets":  [
-                                       {
-                                           "refId":  "diskread",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "read",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.read\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "read",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       },
-                                       {
-                                           "refId":  "diskwrite",
-                                           "type":  "json",
-                                           "source":  "url",
-                                           "format":  "timeseries",
-                                           "seriesName":  "write",
-                                           "url":  "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.write\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
-                                           "url_options":  {
-                                                               "method":  "GET"
-                                                           },
-                                           "root_selector":  "",
-                                           "columns":  [
-                                                           {
-                                                               "selector":  "time",
-                                                               "text":  "time",
-                                                               "type":  "timestamp_epoch"
-                                                           },
-                                                           {
-                                                               "selector":  "value",
-                                                               "text":  "write",
-                                                               "type":  "number"
-                                                           }
-                                                       ]
-                                       }
-                                   ]
-                   }
-               ]
+    "__inputs": [
+        {
+            "name": "DS_INFINITY",
+            "label": "Infinity",
+            "description": "Infinity datasource pointing at rustikv-telemetry-gateway",
+            "type": "datasource",
+            "pluginId": "yesoreyeram-infinity-datasource",
+            "pluginName": "Infinity"
+        }
+    ],
+    "__requires": [
+        {
+            "type": "datasource",
+            "id": "yesoreyeram-infinity-datasource",
+            "name": "Infinity",
+            "version": "1.0.0"
+        }
+    ],
+    "title": "rustikv Telemetry — Raspberry Pi",
+    "uid": "rustikv-pi",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "30s",
+    "time": {
+        "from": "now-1h",
+        "to": "now"
+    },
+    "templating": {
+        "list": [
+            {
+                "name": "gateway",
+                "type": "textbox",
+                "label": "Gateway address",
+                "description": "Host:port of the rustikv-telemetry-gateway query endpoint",
+                "current": {
+                    "value": "localhost:8080",
+                    "text": "localhost:8080",
+                    "selected": true
+                },
+                "options": [
+                    {
+                        "value": "localhost:8080",
+                        "text": "localhost:8080",
+                        "selected": true
+                    }
+                ],
+                "hide": 0
+            },
+            {
+                "name": "host",
+                "type": "textbox",
+                "label": "Pi hostname",
+                "description": "collectd hostname (check /etc/collectd/collectd.conf Hostname setting)",
+                "current": {
+                    "value": "cyber",
+                    "text": "cyber",
+                    "selected": true
+                },
+                "options": [
+                    {
+                        "value": "cyber",
+                        "text": "cyber",
+                        "selected": true
+                    }
+                ],
+                "hide": 0
+            },
+            {
+                "name": "step",
+                "type": "textbox",
+                "label": "Aggregation step (s)",
+                "description": "Bucket size in seconds passed to rustikv aggregation ops",
+                "current": {
+                    "value": "60",
+                    "text": "60",
+                    "selected": true
+                },
+                "options": [
+                    {
+                        "value": "60",
+                        "text": "60",
+                        "selected": true
+                    }
+                ],
+                "hide": 0
+            }
+        ]
+    },
+    "panels": [
+        {
+            "id": 1,
+            "type": "stat",
+            "title": "CPU Usage %",
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "percent",
+                    "min": 0,
+                    "max": 100,
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 1
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "orientation": "auto",
+                "textMode": "auto",
+                "colorMode": "background",
+                "graphMode": "area",
+                "justifyMode": "auto"
+            },
+            "targets": [
+                {
+                    "refId": "user",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "user",
+                    "url": "http://${gateway}/query?metric=pi.${host}.cpu.percent.user\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "user",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "system",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "system",
+                    "url": "http://${gateway}/query?metric=pi.${host}.cpu.percent.system\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "system",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "wait",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "iowait",
+                    "url": "http://${gateway}/query?metric=pi.${host}.cpu.percent.wait\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "iowait",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "type": "timeseries",
+            "title": "Memory",
+            "gridPos": {
+                "x": 12,
+                "y": 0,
+                "w": 12,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "bytes",
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 1
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom"
+                }
+            },
+            "targets": [
+                {
+                    "refId": "used",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "used",
+                    "url": "http://${gateway}/query?metric=pi.${host}.memory.memory.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "used",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "cached",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "cached",
+                    "url": "http://${gateway}/query?metric=pi.${host}.memory.memory.cached\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "cached",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "buffered",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "buffered",
+                    "url": "http://${gateway}/query?metric=pi.${host}.memory.memory.buffered\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "buffered",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "type": "timeseries",
+            "title": "Load Average",
+            "gridPos": {
+                "x": 0,
+                "y": 8,
+                "w": 12,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 2
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom"
+                }
+            },
+            "targets": [
+                {
+                    "refId": "load1",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "1m",
+                    "url": "http://${gateway}/query?metric=pi.${host}.load.load.shortterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "1m",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "load5",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "5m",
+                    "url": "http://${gateway}/query?metric=pi.${host}.load.load.midterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "5m",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "load15",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "15m",
+                    "url": "http://${gateway}/query?metric=pi.${host}.load.load.longterm\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "15m",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "type": "stat",
+            "title": "SoC Temperature",
+            "gridPos": {
+                "x": 12,
+                "y": 8,
+                "w": 6,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "celsius",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "value": null,
+                                "color": "green"
+                            },
+                            {
+                                "value": 60,
+                                "color": "yellow"
+                            },
+                            {
+                                "value": 75,
+                                "color": "red"
+                            }
+                        ]
+                    },
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 20,
+                        "lineWidth": 2
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "orientation": "auto",
+                "textMode": "auto",
+                "colorMode": "background",
+                "graphMode": "area",
+                "justifyMode": "auto"
+            },
+            "targets": [
+                {
+                    "refId": "temp",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "temperature",
+                    "url": "http://${gateway}/query?metric=pi.${host}.thermal.thermal_zone0.temperature\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "temperature",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "type": "timeseries",
+            "title": "Disk Space (root)",
+            "gridPos": {
+                "x": 18,
+                "y": 8,
+                "w": 6,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "bytes",
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 1
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom"
+                }
+            },
+            "targets": [
+                {
+                    "refId": "dfused",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "used",
+                    "url": "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.used\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "used",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "dffree",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "free",
+                    "url": "http://${gateway}/query?metric=pi.${host}.df.root.df_complex.free\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "free",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "type": "timeseries",
+            "title": "Network I/O (eth0)",
+            "gridPos": {
+                "x": 0,
+                "y": 16,
+                "w": 12,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "Bps",
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 1
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom"
+                }
+            },
+            "targets": [
+                {
+                    "refId": "netrx",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "rx",
+                    "url": "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.rx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "rx",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "nettx",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "tx",
+                    "url": "http://${gateway}/query?metric=pi.${host}.interface.eth0.if_octets.tx\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "tx",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "type": "timeseries",
+            "title": "Disk I/O (mmcblk0)",
+            "gridPos": {
+                "x": 12,
+                "y": 16,
+                "w": 12,
+                "h": 8
+            },
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "${DS_INFINITY}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "Bps",
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 1
+                    }
+                },
+                "overrides": []
+            },
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom"
+                }
+            },
+            "targets": [
+                {
+                    "refId": "diskread",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "read",
+                    "url": "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.read\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "read",
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "refId": "diskwrite",
+                    "type": "json",
+                    "source": "url",
+                    "format": "timeseries",
+                    "seriesName": "write",
+                    "url": "http://${gateway}/query?metric=pi.${host}.disk.mmcblk0.disk_octets.write\u0026from=${__from:date:seconds}\u0026to=${__to:date:seconds}\u0026agg=avg\u0026step=${step}",
+                    "url_options": {
+                        "method": "GET"
+                    },
+                    "root_selector": "",
+                    "columns": [
+                        {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp_epoch"
+                        },
+                        {
+                            "selector": "value",
+                            "text": "write",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
