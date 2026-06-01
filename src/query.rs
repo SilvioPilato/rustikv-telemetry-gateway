@@ -43,6 +43,8 @@ pub fn serve(config: Config) -> std::io::Result<()> {
 
 fn handle(mut conn: TcpStream, config: &Config, client: &mut Client) -> std::io::Result<()> {
     // Read just the request line (first line); we ignore headers/body for GET.
+    // Set a read timeout so we don't hang if the client sends no data.
+    conn.set_read_timeout(Some(std::time::Duration::from_secs(5)))?;
     let mut reader = BufReader::new(conn.try_clone()?);
     let mut line = String::new();
     reader.read_line(&mut line)?;
@@ -51,7 +53,9 @@ fn handle(mut conn: TcpStream, config: &Config, client: &mut Client) -> std::io:
         Ok(json) => http_ok(&json),
         Err((code, msg)) => http_err(code, &msg),
     };
-    conn.write_all(resp.as_bytes())
+    conn.write_all(resp.as_bytes())?;
+    // Signal EOF to the client so browsers / curl don't hang waiting for more data.
+    conn.shutdown(std::net::Shutdown::Write)
 }
 
 fn build_response(
