@@ -1,5 +1,6 @@
 use std::io::{BufRead, BufReader, Write};
 use std::net::{TcpListener, TcpStream};
+use std::thread;
 
 use rustikv::bffp::{Command, ResponseStatus};
 
@@ -24,19 +25,34 @@ pub fn bucket_ranges(from: i64, to: i64, step: i64) -> Vec<(i64, i64)> {
 pub fn serve(config: Config) -> std::io::Result<()> {
     let listener = TcpListener::bind(&config.query_addr)?;
     eprintln!("query listening on {}", config.query_addr);
-    let mut client = Client::connect(&config.rustikv_addr)?;
-    if let Some(name) = &config.collection {
-        client.use_collection(name)?;
-        eprintln!("query: using collection {name:?}");
+    // Warm-up: verify rustikv is reachable at startup.
+    {
+        let mut client = Client::connect(&config.rustikv_addr)?;
+        if let Some(name) = &config.collection {
+            client.use_collection(name)?;
+            eprintln!("query: using collection {name:?}");
+        }
     }
     for conn in listener.incoming().flatten() {
-        if let Err(e) = handle(conn, &config, &mut client) {
-            eprintln!("query: conn error: {e}; reconnecting");
-            match client.reconnect() {
-                Ok(()) => eprintln!("query: reconnected successfully"),
-                Err(re) => eprintln!("query: reconnect failed: {re}"),
+        let cfg = config.clone();
+        thread::spawn(move || {
+            let mut client = match Client::connect(&cfg.rustikv_addr) {
+                Ok(c) => c,
+                Err(e) => {
+                    eprintln!("query: rustikv connect failed: {e}");
+                    return;
+                }
+            };
+            if let Some(name) = &cfg.collection {
+                if let Err(e) = client.use_collection(name) {
+                    eprintln!("query: USE failed: {e}");
+                    return;
+                }
             }
-        }
+            if let Err(e) = handle(conn, &cfg, &mut client) {
+                eprintln!("query: conn error: {e}");
+            }
+        });
     }
     Ok(())
 }

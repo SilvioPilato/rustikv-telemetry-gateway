@@ -12,6 +12,7 @@ pub struct Client {
 impl Client {
     pub fn connect(addr: &str) -> io::Result<Self> {
         let stream = TcpStream::connect(addr)?;
+        stream.set_read_timeout(Some(std::time::Duration::from_secs(10)))?;
         Ok(Self {
             addr: addr.to_string(),
             stream,
@@ -67,6 +68,7 @@ impl Client {
     pub fn reconnect(&mut self) -> io::Result<()> {
         eprintln!("rustikv: reconnecting to {}", self.addr);
         self.stream = TcpStream::connect(&self.addr)?;
+        self.stream.set_read_timeout(Some(std::time::Duration::from_secs(10)))?;
         eprintln!("rustikv: reconnected");
         if let Some(name) = self.collection.clone() {
             eprintln!("rustikv: re-issuing USE {name:?}");
